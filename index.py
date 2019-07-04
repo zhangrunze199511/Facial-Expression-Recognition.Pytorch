@@ -16,10 +16,12 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from cam import Camera
 
+
+
 app = Flask(__name__)
 CORS(app)
 cam = Camera(800, 600)
-
+IMAGE_PATH = 'E:/workplace/electron_wp/Doubing_web_client/public/facial.png'
 
 detector = MTCNN()
 
@@ -55,7 +57,7 @@ def get_face_img(detector, img):
     results = detector.detect_faces(img)
 
     if len(results) == 0:
-        cv2.imwrite('E:/workplace/electron_wp/Doubing Project/public/facial.png', img)
+        cv2.imwrite(IMAGE_PATH, img)
         return None
     faces = []
     # for face_detected in results:
