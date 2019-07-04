@@ -120,7 +120,7 @@ def get_emotion_from_face_img(image):
 
     # cv2.rectangle(image, c1, c2, (0, 0, 255), 2)
 
-    cv2.imwrite('E:/workplace/electron_wp/Doubing Project/public/facial.png', new_image)
+    cv2.imwrite(IMAGE_PATH, new_image)
 
 
 
