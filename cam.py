@@ -7,11 +7,11 @@ class Camera:
         self.operating = False
         self.height = height
         self.width = width
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(0) # use local camera as video source
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
 
-    def start(self, processingFunction):
+    def start(self, processingFunction):# processing fuction: the function used to process image, take an image grid as input para
         self.operating = True
         while(self.operating):
             ret, frame = self.cap.read()

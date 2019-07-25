@@ -17,14 +17,16 @@ from flask_cors import CORS
 from cam import Camera
 
 
-
+# initial router
 app = Flask(__name__)
 CORS(app)
+
+#set initial camera size
 cam = Camera(800, 600)
 IMAGE_PATH = 'E:/workplace/electron_wp/Doubing_web_client/public/facial.png'
 
+#para for detector and initial
 detector = MTCNN()
-
 cut_size = 44
 transform_test = transforms.Compose([
     transforms.TenCrop(cut_size),
@@ -40,7 +42,10 @@ net.eval()
 print('server ready')
 
 
-
+# draw face boundary on original image,
+# c1 for left-top & c2 for right-bottom point
+# cls for expression type
+# img for original image
 def write(c1, c2, cls, img):
     label = "{0}".format(class_names[cls])
     color = colors[cls]
@@ -52,6 +57,8 @@ def write(c1, c2, cls, img):
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1);
     return img
 
+# get facial detection prediction
+# will return boundary of face
 
 def get_face_img(detector, img):
     results = detector.detect_faces(img)
@@ -83,11 +90,11 @@ def get_face_img(detector, img):
 
 
 
-
+# preprocessing
 def rgb2gray(rgb):
     return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
-
+# perfrom emotion detection with detected faces from original image
 def get_emotion_from_face_img(image):
     raw_img, c1, c2 = get_face_img(detector, image)
 
@@ -126,6 +133,10 @@ def get_emotion_from_face_img(image):
 
     return int(predicted.cpu().numpy())
 
+
+# API for server
+
+# test api
 @app.route('/')
 def hello_world():
     return jsonify({
@@ -133,7 +144,7 @@ def hello_world():
     })
 #
 
-#
+# update a new image
 @app.route('/emotion/update', methods=['POST'])
 def cam_update_img():
     global cam
